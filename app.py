@@ -40,23 +40,22 @@ def convert_pdf(target_fn):
     content = output_fh.read().decode('utf-8')
     return content
 
-
 @app.route('/convert')
 def convert():
     pdf = request.args.get('pdf', '')
-    
     target_fn = os.path.join('scratch', 'tmp.pdf')
-    
     try:
         urllib.urlretrieve(pdf, target_fn)
     except IOError as e:
         print('IO error({0}): {1}'.format(e.errno, e.strerror))
         return render_template('convert.html', pdf=pdf, pdf_content='IO error')
-        
+
     pdf_content = convert_pdf(target_fn)
-    
+
     return render_template('convert.html', pdf=pdf, pdf_content=pdf_content)
-    
+
 if __name__ == '__main__':
-    app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
+    # swo> use this on c9
+    #app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
+    app.run()
     app.debug = True
